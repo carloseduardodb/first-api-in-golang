@@ -1,0 +1,30 @@
+_id: req_30bde0be9bf64d19bf66452d2a25befa
+type: Request
+parentId: wrk_745ca4ff23564db9a954ff302bc498fe
+modified: 1661710459898
+created: 1661710130478
+url: "{{ _.host }}/user/4"
+name: update-user
+description: ""
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Carlos Eduardo DB 1 Update",
+    	"email": "carloscangere@hotmail.com"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_e9000b4959684617b26ba0d5cdbc054e
+authentication: {}
+metaSortKey: -1661710130478
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,30 @@
+_id: req_05828338e85e400387e5a6400b3594b9
+type: Request
+parentId: wrk_745ca4ff23564db9a954ff302bc498fe
+modified: 1661710462266
+created: 1661707432919
+url: "{{ _.host }}/users"
+name: save-user
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "Carlos Eduardo DB",
+    	"email": "carloscangere@hotmail.com"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_fdd2dd58d41347a0904f6fa72cf9dc78
+authentication: {}
+metaSortKey: -1661707432919
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

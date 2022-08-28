@@ -1,0 +1,21 @@
+_id: req_19372d99da61423097ee9ee3c3ce9fdd
+type: Request
+parentId: wrk_745ca4ff23564db9a954ff302bc498fe
+modified: 1661710232549
+created: 1661710142790
+url: "{{ _.host }}/user/4"
+name: delete-user
+description: ""
+method: DELETE
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1661710142790
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
