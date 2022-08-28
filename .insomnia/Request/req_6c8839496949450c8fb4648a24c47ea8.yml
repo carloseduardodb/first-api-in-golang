@@ -1,0 +1,21 @@
+_id: req_6c8839496949450c8fb4648a24c47ea8
+type: Request
+parentId: wrk_745ca4ff23564db9a954ff302bc498fe
+modified: 1661709928799
+created: 1661709901764
+url: "{{ _.host }}/users"
+name: find-users
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1661709901764
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
