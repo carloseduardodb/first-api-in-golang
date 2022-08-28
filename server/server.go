@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -79,16 +80,26 @@ func FindUsers(w http.ResponseWriter, r *http.Request) {
 		rows.Scan(&user.ID, &user.Name, &user.Email)
 		users = append(users, user)
 	}
+
 	if err := rows.Err(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(users)
+
+	if err := json.NewEncoder(w).Encode(users); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func FindUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	ID, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	db, err := database.Connect()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -96,24 +107,33 @@ func FindUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	row := db.QueryRow("SELECT * FROM users WHERE id = ?", id)
+	row := db.QueryRow("SELECT * FROM users WHERE id = ?", ID)
 	var user user
 	if (row.Scan(&user.ID, &user.Name, &user.Email)) != nil {
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	row.Scan(&user.ID, &user.Name, &user.Email)
-	json.NewEncoder(w).Encode(user)
+	if err := json.NewEncoder(w).Encode(user); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	ID, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	var user user
 	if err := json.Unmarshal(body, &user); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -134,19 +154,24 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer statement.Close()
 
-	_, err = statement.Exec(user.Name, user.Email, id)
+	_, err = statement.Exec(user.Name, user.Email, ID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fmt.Sprintf("User with id %s updated", id)))
+	w.Write([]byte(fmt.Sprintf("User with id %d updated", ID)))
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id := vars["id"]
+	ID, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	db, err := database.Connect()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -161,12 +186,12 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer statement.Close()
 
-	_, err = statement.Exec(id)
+	_, err = statement.Exec(ID)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(fmt.Sprintf("User with id %s deleted", id)))
+	w.Write([]byte(fmt.Sprintf("User with id %d deleted", ID)))
 }
